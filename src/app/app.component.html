@@ -1,0 +1,41 @@
+<h1>Welcome Angular OfficeJS Demo</h1>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+  <a routerLink=""  class="navbar-brand login-padding" *ngIf="!isUserLoggedIn()" (click)="login()" >Login</a>
+  <a routerLink="" class="navbar-brand login-padding" *ngIf="isUserLoggedIn()" (click)="logout()" >Logout</a>
+</nav>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a
+      class="nav-link"
+      routerLink="/home"
+      aria-current="page"
+      routerLinkActive="active"
+      >Home</a
+    >
+  </li>
+  <li class="nav-item" *ngIf="isUserLoggedIn()">
+    <a
+      class="nav-link"
+      routerLink="/document"
+      aria-current="page"
+      routerLinkActive="active"
+      >Documents</a
+    >
+  </li>
+  <li class="nav-item" *ngIf="isUserLoggedIn()">
+    <a
+      class="nav-link"
+      routerLink="/profile"
+      aria-current="page"
+      routerLinkActive="active"
+      >Profile</a
+    >
+  </li>
+</ul>
+
+<router-outlet></router-outlet>
+
+ 
