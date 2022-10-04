@@ -2,8 +2,8 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light ">
-  <a routerLink=""  class="navbar-brand login-padding" *ngIf="!isUserLoggedIn()" (click)="login()" >Login</a>
-  <a routerLink="" class="navbar-brand login-padding" *ngIf="isUserLoggedIn()" (click)="logout()" >Logout</a>
+  <a routerLink=""  class="navbar-brand login-padding" *ngIf="!isUserLoggedIn()" (click)="loginPopup()" >Login</a>
+  <a routerLink="" class="navbar-brand login-padding" *ngIf="isUserLoggedIn()" (click)="logout(true)" >Logout</a>
 </nav>
 
 <ul class="nav nav-tabs">

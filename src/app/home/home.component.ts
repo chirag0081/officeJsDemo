@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   // Mark section with content control
   getSelectedText(callback: any): any {
-  
+    
     // Run a batch operation against the Word object model.
     Word.run((context: any) => {
       // Create a proxy range object for the current selection.
@@ -152,4 +152,11 @@ export class HomeComponent implements OnInit {
       callback(false);
     });
   }
+
+   
+  openLoginPopup(): void {    
+    Office.context.ui.displayDialogAsync('https://localhost:4200/login',
+      { height: 40, width: 30,displayInIframe: false});
+  }
+ 
 }
