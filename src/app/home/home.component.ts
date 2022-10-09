@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
 
 declare const Office: any;
 declare const OfficeExtension: any;
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   public selectedText: string = '';
   public replaceText: string = '';
 
-  constructor() {}
+  constructor(private msalService: MsalService) {}
 
   ngOnInit(): void {}
 
@@ -26,7 +27,6 @@ export class HomeComponent implements OnInit {
 
   // Mark section with content control
   getSelectedText(callback: any): any {
-    
     // Run a batch operation against the Word object model.
     Word.run((context: any) => {
       // Create a proxy range object for the current selection.
@@ -153,10 +153,29 @@ export class HomeComponent implements OnInit {
     });
   }
 
-   
-  openLoginPopup(): void {    
-    Office.context.ui.displayDialogAsync('https://localhost:4200/login',
-      { height: 40, width: 30,displayInIframe: false});
+  dialog;
+  openLoginPopup(): void {
+    //Office.context.ui.displayDialogAsync('https://login.microsoftonline.com/0c0cc3c4-4b87-4a2a-8003-1aa4656d1f0a/oauth2/v2.0/authorize?client_id=bccf936a-d9b3-4ced-91f1-871ffbedb83a&scope=user.read',
+    //Office.context.ui.openBrowserWindow('https://localhost:4200#/login');
+    //Office.context.ui.displayDialogAsync('https://login.microsoftonline.com/0c0cc3c4-4b87-4a2a-8003-1aa4656d1f0a/oauth2/v2.0/authorize?client_id=bccf936a-d9b3-4ced-91f1-871ffbedb83a&scope=user.read%20openid%20profile%20offline_access&redirect_uri=https%3A%2F%2Flocalhost%3A4200&client-request-id=d7b0d807-d940-4830-b8fd-bf6242c851e3&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=2.28.3&client_info=1&code_challenge=4ODX0JdXsC2oRwRDx9i0zWJGuGSVnUWbzX0otLjGLu0&code_challenge_method=S256&nonce=8dda236c-b824-40af-890d-10f01abd207b&state=eyJpZCI6IjJjOWIzZDY3LWJlMWYtNDNiMy1iMTRiLWU5ZWVjOTc4ODAwYSIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicG9wdXAifX0%3D',
+    Office.context.ui.displayDialogAsync('https://localhost:4200#/login',
+    { height: 40, width: 30, displayInIframe: true },
+      (result) => {
+        this.dialog = result.value;
+        this.dialog.addEventHandler(
+          Office.EventType.DialogMessageReceived,
+          this.processMessage
+        );
+      }
+    );
   }
- 
+
+  processMessage(arg) {
+    var messageFromDialog = JSON.parse(arg.message);
+    console.log(messageFromDialog.name);
+    this.dialog.close();
+  }
+  isUserLoggedIn(): boolean {
+    return this.msalService.instance.getActiveAccount() !== null;
+  }
 }

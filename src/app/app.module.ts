@@ -3,8 +3,19 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { MsalGuard, MsalInterceptor, MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
-import { InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
+import {
+  MsalGuard,
+  MsalInterceptor,
+  MsalModule,
+  MsalRedirectComponent,
+  MsalService,
+  MSAL_INSTANCE,
+} from '@azure/msal-angular';
+import {
+  InteractionType,
+  IPublicClientApplication,
+  PublicClientApplication,
+} from '@azure/msal-browser';
 import { AppComponent } from './app.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { HomeComponent } from './home/home.component';
@@ -12,16 +23,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 
-const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1;
-export function MSALInstanceFactory(): IPublicClientApplication {
-  return new PublicClientApplication({
-    auth: { 
-      clientId:"bccf936a-d9b3-4ced-91f1-871ffbedb83a",
-      redirectUri: "https://localhost:4200",
-      postLogoutRedirectUri: "https://localhost:4200"
-    }
-  });
-}
+const isIE =
+  window.navigator.userAgent.indexOf('MSIE ') > -1 ||
+  window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
   declarations: [
@@ -30,7 +34,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     ProfileComponent,
     HomeComponent,
     PageNotFoundComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,31 +43,38 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
-          clientId: "bccf936a-d9b3-4ced-91f1-871ffbedb83a",
-          redirectUri: "https://localhost:4200",
-          postLogoutRedirectUri: "https://localhost:4200"
+          clientId: 'bccf936a-d9b3-4ced-91f1-871ffbedb83a',
+          authority: 'https://login.microsoftonline.com/0c0cc3c4-4b87-4a2a-8003-1aa4656d1f0a',
+          redirectUri: 'https://localhost:4200',
+          postLogoutRedirectUri: 'https://localhost:4200',
         },
         cache: {
-          cacheLocation: "localStorage" ,
-          storeAuthStateInCookie: isIE, 
+          cacheLocation: 'localStorage',
+          storeAuthStateInCookie: isIE,
         },
       }),
       {
-        interactionType: InteractionType.Popup, // Msal Guard Configuration
+        interactionType: InteractionType.Redirect, // Msal Guard Configuration
         authRequest: {
-          scopes: ["user.read"],
+          scopes: ['user.read', 'openid', 'profile'],
         },
       },
-      null
-    ) 
+      {
+        interactionType: InteractionType.Redirect,
+        protectedResourceMap: new Map([
+          ['https://graph.microsoft.com/v1.0/me', ['user.read']],
+        ]),
+      }
+    ),
   ],
   providers: [
-    // {
-    //   provide: MSAL_INSTANCE,
-    //   useFactory: MSALInstanceFactory,
-    // },
-    MsalService ,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true,
+    },
+    MsalService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent],
 })
-export class AppModule { }
+export class AppModule {}

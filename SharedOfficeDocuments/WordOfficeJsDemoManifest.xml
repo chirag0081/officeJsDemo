@@ -29,7 +29,8 @@
 
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
-  <AppDomain>https://localhost:4200/</AppDomain>
+    <AppDomain>https://localhost:4200/</AppDomain>  
+	<AppDomain>https://login.microsoftonline.com/</AppDomain>	
   </AppDomains>
   <!--End Basic Settings. -->
 
@@ -161,4 +162,13 @@
   </VersionOverrides>
   <!-- End Add-in Commands Mode integration. -->
 
+<WebApplicationInfo>
+  <Id>bccf936a-d9b3-4ced-91f1-871ffbedb83a</Id>
+  <Resource>api://localhost:3000/bccf936a-d9b3-4ced-91f1-871ffbedb83a</Resource>
+  <Scopes>
+    <Scope>User.Read</Scope>
+    <Scope>profile</Scope>
+    <Scope>openid</Scope>
+  </Scopes>
+</WebApplicationInfo>
 </OfficeApp>

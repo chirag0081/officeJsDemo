@@ -8,7 +8,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserauthguardGuard } from './userauthguard.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
   {
     path: 'document',
@@ -20,12 +19,13 @@ const routes: Routes = [
     component: ProfileComponent,
     canActivate: [UserauthguardGuard],
   },
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

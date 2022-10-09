@@ -14,5 +14,5 @@
   <br/>
   <br/>
 
-  <button (click)="openLoginPopup()">Open Popup</button>
+  <button *ngIf="!isUserLoggedIn()"  (click)="openLoginPopup()">Open Login Popup</button>
 </ul>
