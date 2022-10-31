@@ -15,4 +15,14 @@
   <br/>
 
   <button *ngIf="!isUserLoggedIn()"  (click)="openLoginPopup()">Open Login Popup</button>
+
+  <button (click)="CreatePdf()">Create Pdf</button>
+
+  <table *ngIf="names">
+    <tr *ngFor="let name of names">
+      <td>
+        {{name}}
+      </td>
+    </tr>
+  </table>
 </ul>

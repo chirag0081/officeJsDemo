@@ -22,6 +22,7 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
+import { HomeWebService } from './home/home.web.service';
 
 const isIE =
   window.navigator.userAgent.indexOf('MSIE ') > -1 ||
@@ -74,6 +75,7 @@ const isIE =
       multi: true,
     },
     MsalService,
+    HomeWebService
   ],
   bootstrap: [AppComponent, MsalRedirectComponent],
 })

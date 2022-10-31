@@ -5,7 +5,7 @@ import {
   MsalService,
   MSAL_GUARD_CONFIG,
 } from '@azure/msal-angular';
-import { AuthenticationResult, RedirectRequest } from '@azure/msal-browser';
+import { AuthenticationResult, PublicClientApplication, RedirectRequest } from '@azure/msal-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 declare const Office: any;
@@ -24,7 +24,12 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {}
 
+   
+
   ngOnInit(): void {
+    // let msalInstance: PublicClientApplication = this.msalService.instance as PublicClientApplication;
+    // msalInstance["browserStorage"].clear();
+    
     if (!this.isUserLoggedIn()) {
       this.msalService.loginRedirect();
     } else {
